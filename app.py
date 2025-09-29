@@ -23,3 +23,22 @@ def load_user(user_id):
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password']
+        if not username or not password:
+            flash('username and password required', 'danger')
+            return redirect(url_for('register'))
+        if User.query.filter_by(username=username).first():
+            flash('username taken', 'danger')
+            return redirect(url_for('register'))
+        u = User(username=username)
+        u.set_password(password)
+        db.session.add(u)
+        db.session.commit()
+        flash('registered! please login', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html')
