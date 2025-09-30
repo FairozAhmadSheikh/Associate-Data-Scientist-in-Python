@@ -86,3 +86,16 @@ def start_demo_scan():
 
     flash('Scan started (demo). Check job status page.', 'info')
     return redirect(url_for('job_status', job_id=job.id))
+
+@app.route('/job/<int:job_id>')
+@login_required
+def job_status(job_id):
+    job = ScanJob.query.get_or_404(job_id)
+    if job.user_id != current_user.id:
+        flash('not allowed', 'danger')
+        return redirect(url_for('index'))
+    return render_template('job_status.html', job=job)
+
+
+if __name__ == '__main__':
+    app.run(port=8000)
