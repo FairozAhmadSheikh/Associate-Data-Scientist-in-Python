@@ -56,3 +56,10 @@ def login():
         flash('invalid credentials', 'danger')
         return redirect(url_for('login'))
     return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('logged out', 'info')
+    return redirect(url_for('index'))
