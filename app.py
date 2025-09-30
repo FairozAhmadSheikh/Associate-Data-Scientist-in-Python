@@ -63,3 +63,13 @@ def logout():
     logout_user()
     flash('logged out', 'info')
     return redirect(url_for('index'))
+
+@app.route('/start-demo-scan', methods=['POST'])
+@login_required
+def start_demo_scan():
+    # Demo: start a safe, localhost-only port-scan task via Celery
+    target = request.form.get('target', 'localhost')
+    # enforce allowed target
+    if target.split(':')[0] not in ('localhost', '127.0.0.1', '::1'):
+        flash('Only localhost targets allowed in this demo', 'danger')
+        return redirect(url_for('index'))
