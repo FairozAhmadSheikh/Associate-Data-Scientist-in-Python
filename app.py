@@ -77,3 +77,12 @@ def start_demo_scan():
     job = ScanJob(user_id=current_user.id, type='demo-port-scan', params=f"target={target}", status='queued')
     db.session.add(job)
     db.session.commit()
+
+    # enqueue Celery task
+    task = run_demo_port_scan.delay(job.id, target)
+    job.task_id = task.id
+    db.session.commit()
+
+
+    flash('Scan started (demo). Check job status page.', 'info')
+    return redirect(url_for('job_status', job_id=job.id))
