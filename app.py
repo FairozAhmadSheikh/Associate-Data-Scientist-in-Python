@@ -73,3 +73,7 @@ def start_demo_scan():
     if target.split(':')[0] not in ('localhost', '127.0.0.1', '::1'):
         flash('Only localhost targets allowed in this demo', 'danger')
         return redirect(url_for('index'))
+    # create DB job record
+    job = ScanJob(user_id=current_user.id, type='demo-port-scan', params=f"target={target}", status='queued')
+    db.session.add(job)
+    db.session.commit()
