@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <title>ReconApp Demo</title>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <a href="/">Home</a>
+                {% if current_user.is_authenticated %}
+                    <span> | Logged in as {{ current_user.username }}</span>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                {% endif %}
+            </nav>
+        </header>
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, msg in messages %}
+                        <li><strong>{{ category }}:</strong> {{ msg }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+ </body>
+</html>
