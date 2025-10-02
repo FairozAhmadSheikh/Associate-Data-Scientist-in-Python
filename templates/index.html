@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>ReconApp — Day 1 demo</h1>
+    <p>Safe demo: localhost-only scans. Use responsibly.</p>
+    {% if current_user.is_authenticated %}
+        <form method="post" action="/start-demo-scan">
+            <label>Target (localhost only): <input name="target" value="localhost"></label>
+            <button type="submit">Start demo port scan</button>
+        </form>
+    {% else %}
+        <p>Please <a href="/login">login</a> to run demo scans.</p>
+    {% endif %}
+{% endblock %}
